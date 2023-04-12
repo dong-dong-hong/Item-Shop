@@ -1,7 +1,7 @@
 package com.item.itemshop.exception;
 
 public class NotEnoughStockException extends RuntimeException {
-    public NotEnoughStockException() {}
+    protected NotEnoughStockException() {}
 
     public NotEnoughStockException(String message) {
         super(message);
