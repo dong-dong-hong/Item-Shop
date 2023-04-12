@@ -1,4 +1,4 @@
-package com.item.itemshop.domain.item;
+package com.item.itemshop.domain.item.category;
 
 import jakarta.persistence.*;
 import lombok.Getter;
