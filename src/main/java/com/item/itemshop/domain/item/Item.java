@@ -1,5 +1,6 @@
 package com.item.itemshop.domain.item;
 
+import com.item.itemshop.domain.item.category.CategoryItem;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
