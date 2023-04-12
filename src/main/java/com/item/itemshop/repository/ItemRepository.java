@@ -11,11 +11,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class ItemRepository {
 
     @PersistenceContext
     private EntityManager em;
-   private JPAQueryFactory queryFactory;
+
+    public ItemRepository(EntityManager em){
+        this.em = em;
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+    }
 
     public void save(Item item) {
         if(item.getId() == null) {
