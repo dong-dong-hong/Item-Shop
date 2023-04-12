@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+@ComponentScan(basePackages = {"com.item.itemshop", "com.querydsl.jpa"})
 public class ItemShopApplication {
 
     public static void main(String[] args) {
