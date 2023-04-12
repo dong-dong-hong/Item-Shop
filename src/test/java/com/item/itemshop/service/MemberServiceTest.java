@@ -18,18 +18,22 @@ class MemberServiceTest {
     @Autowired MemberRepository memberRepository;
 
     @Test
-    void join() throws Exception{
+    void join(){
         // Given(준비)
         Member member = new Member();
         member.setName("DongDong");
         // When(실행)
         Long saveId = memberService.join(member);
         // Then(검증)
-        Assertions.assertEquals(member, memberRepository.findOne(saveId));
+        Member savedMember = memberRepository.findOne(saveId);
+        Assertions.assertEquals(member.getId(),savedMember.getId());
+        Assertions.assertEquals(member.getName(),savedMember.getName());
+        System.out.println("savedMember = " + savedMember);
     }
+    
 
     @Test
-    void validateDuplicateMember() throws Exception {
+    void validateDuplicateMember(){
         // given
         Member member1 = new Member();
         member1.setName("DongDong");
@@ -37,7 +41,7 @@ class MemberServiceTest {
         Member member2 = new Member();
         member2.setName("DongDong");
         // when
-        memberService.join(member1);
+        Long join = memberService.join(member1);
         // then
         assertThrows(IllegalStateException.class, () -> {
             memberService.join(member2);
