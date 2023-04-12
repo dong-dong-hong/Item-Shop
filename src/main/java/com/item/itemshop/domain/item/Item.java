@@ -1,6 +1,6 @@
 package com.item.itemshop.domain.item;
 
-import com.item.itemshop.domain.item.category.CategoryItem;
+import com.item.itemshop.domain.item.category.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
-
 @Getter @Setter
 public abstract class Item {
 
@@ -25,7 +24,6 @@ public abstract class Item {
 
     private int stockQuantity;
 
-    @OneToMany(mappedBy = "item")
-    private List<CategoryItem> categoryItems = new ArrayList<>();
-
+    @OneToMany
+    private List<Category> categoryItems = new ArrayList<>();
 }
