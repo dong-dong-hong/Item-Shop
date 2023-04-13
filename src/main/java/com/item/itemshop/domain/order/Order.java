@@ -89,4 +89,7 @@ public class Order {
         return totalPrice;
     }
 
+    public Order orElse(Object o) {
+        return null;
+    }
 }

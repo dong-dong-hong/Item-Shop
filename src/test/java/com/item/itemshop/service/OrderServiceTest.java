@@ -2,22 +2,27 @@ package com.item.itemshop.service;
 
 import com.item.itemshop.domain.item.*;
 import com.item.itemshop.domain.member.Member;
+import com.item.itemshop.domain.member.QMember;
 import com.item.itemshop.domain.order.Order;
+import com.item.itemshop.domain.order.OrderSearch;
 import com.item.itemshop.domain.order.OrderStatus;
+import com.item.itemshop.domain.order.QOrder;
 import com.item.itemshop.exception.NotEnoughStockException;
 import com.item.itemshop.repository.OrderRepository;
-import jakarta.persistence.DiscriminatorValue;
+import com.querydsl.core.BooleanBuilder;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 @SpringBootTest
 @Transactional
@@ -132,6 +137,58 @@ class OrderServiceTest {
 
         assertEquals(OrderStatus.CANCEL, getOrder4.getOrderStatus());
         assertEquals(59, food.getStockQuantity());
+    }
+
+
+    @Test
+    @Transactional
+    public void testFindAll() throws Exception {
+        // given
+        Member member1 = new Member();
+        member1.setName("DongDong");
+        member1.setAddress("서울시 마포구");
+        member1.setAddressDetail("공덕동 123-456");
+        em.persist(member1);
+        em.flush();
+
+        Member findMember = em.find(Member.class, 1L);
+
+        Order order1 = new Order();
+        order1.setMember(findMember);
+        order1.setOrderDate(LocalDateTime.now());
+        order1.setOrderStatus(OrderStatus.ORDER);
+        em.persist(order1);
+        em.flush();
+
+        OrderSearch orderSearch = new OrderSearch();
+        orderSearch.setMemberName("DongDong");
+        orderSearch.setOrderStatus(OrderStatus.ORDER);
+
+        // when
+        List<Order> orders = orderRepository.findAll(orderSearch);
+
+        // then
+        Assertions.assertThat(orders).hasSize(1);
+        Assertions.assertThat(orders.get(0).getMember().getName()).isEqualTo(orderSearch.getMemberName());
+        Assertions.assertThat(orders.get(0).getOrderStatus()).isEqualTo(OrderStatus.ORDER);
+    }
+
+    // queryDSL을 이용하려고 했으나 일단 보류..
+    private BooleanBuilder buildOrderPredicate(OrderSearch orderSearch) {
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            builder.and(member.name.eq(orderSearch.getMemberName()));
+        }
+
+        if (orderSearch.getOrderStatus() != null) {
+            builder.and(order.orderStatus.eq(orderSearch.getOrderStatus()));
+        }
+
+        return builder;
     }
 
 

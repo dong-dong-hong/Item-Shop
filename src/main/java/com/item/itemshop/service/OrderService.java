@@ -6,6 +6,7 @@ import com.item.itemshop.domain.item.Item;
 import com.item.itemshop.domain.member.Member;
 import com.item.itemshop.domain.order.Order;
 import com.item.itemshop.domain.order.OrderItem;
+import com.item.itemshop.domain.order.OrderSearch;
 import com.item.itemshop.exception.NotEnoughStockException;
 import com.item.itemshop.repository.ItemRepository;
 import com.item.itemshop.repository.MemberRepository;
@@ -73,7 +74,7 @@ public class OrderService {
     }
 
     // 주문 검색
-//    public List<Order> findOrders(Ordersearch ordersearch) {
-//        return orderRepository.findAll(ordersearch);
-//    }
+    public List<Order> findOrders(OrderSearch ordersearch) {
+        return orderRepository.findAll(ordersearch);
+    }
 }
