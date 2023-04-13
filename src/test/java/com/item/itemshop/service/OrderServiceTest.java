@@ -1,8 +1,6 @@
 package com.item.itemshop.service;
 
-import com.item.itemshop.domain.item.Book;
-import com.item.itemshop.domain.item.Clean;
-import com.item.itemshop.domain.item.Item;
+import com.item.itemshop.domain.item.*;
 import com.item.itemshop.domain.member.Member;
 import com.item.itemshop.domain.order.Order;
 import com.item.itemshop.domain.order.OrderStatus;
@@ -40,12 +38,22 @@ class OrderServiceTest {
         Item item2 = createClean("로봇청소기", 150000,100);
         int orderCount2 = 30;
 
+        Item item3 = createClean("야구공", 10000,1000);
+        int orderCount3 = 100;
+
+        Item item4 = createClean("60계치킨", 20000,60);
+        int orderCount4 = 10;
+
         //When
         Long orderId = orderService.order(member.getId(), item.getId(), orderCount);
         Long orderId2 = orderService.order(member.getId(), item2.getId(), orderCount2);
+        Long orderId3 = orderService.order(member.getId(), item3.getId(), orderCount3);
+        Long orderId4 = orderService.order(member.getId(), item4.getId(), orderCount4);
         //Then
         Order getOrder = orderRepository.findOne(orderId);
         Order getOrder2 = orderRepository.findOne(orderId2);
+        Order getOrder3 = orderRepository.findOne(orderId3);
+        Order getOrder4 = orderRepository.findOne(orderId4);
 
        assertEquals(OrderStatus.ORDER, getOrder.getOrderStatus()); // 상품 주문 시 상태는 ORDER
        assertEquals(1, getOrder.getOrderItems().size()); // 주문한 상품 종류 수가 정확
@@ -57,8 +65,15 @@ class OrderServiceTest {
        assertEquals(150000 * 30, getOrder2.getTotalPrice());
        assertEquals(70, item2.getStockQuantity());
 
-        System.out.println("getOrder = " + getOrder.getTotalPrice());
-        System.out.println("getOrder2 = " + getOrder2.getTotalPrice());
+        assertEquals(OrderStatus.ORDER, getOrder3.getOrderStatus());
+        assertEquals(1, getOrder3.getOrderItems().size());
+        assertEquals(10000 * 100, getOrder3.getTotalPrice());
+        assertEquals(900, item3.getStockQuantity());
+
+        assertEquals(OrderStatus.ORDER, getOrder4.getOrderStatus());
+        assertEquals(1, getOrder4.getOrderItems().size());
+        assertEquals(20000 * 10, getOrder4.getTotalPrice());
+        assertEquals(50, item4.getStockQuantity());
     }
 
     @Test
@@ -67,10 +82,8 @@ class OrderServiceTest {
         // given
         Member member = createMember();
 
-        Book book= createBook("백엔드 개발자", 20000,50);
-
+        Book book = createBook("백엔드 개발자", 20000,50);
         int orderCount = 100; // 재고보다 많은 수량
-        // when
         // then
         assertThrows(NotEnoughStockException.class, () -> {
             orderService.order(member.getId(), book.getId(), orderCount);
@@ -82,19 +95,43 @@ class OrderServiceTest {
     public void orderCancel() throws Exception {
         // given
         Member member = createMember();
-        Book item = createBook("DongDongJPA", 50000, 200);
 
+        Book book = createBook("DongDongJPA", 50000, 200);
         int orderCount = 100;
+        Clean clean = createClean("물걸레 청소기", 10000, 100);
+        int orderCount2 = 50;
+        Sport sport = createSport("야구방망이", 200000, 200);
+        int orderCount3 = 100;
+        Food food = createFood("59쌀피자", 5900, 59);
+        int orderCount4 = 9;
 
-        Long orderId = orderService.order(member.getId(), item.getId(), orderCount);
+        Long orderId = orderService.order(member.getId(), book.getId(), orderCount);
+        Long orderId2 = orderService.order(member.getId(), clean.getId(), orderCount2);
+        Long orderId3 = orderService.order(member.getId(), sport.getId(), orderCount3);
+        Long orderId4 = orderService.order(member.getId(), food.getId(), orderCount4);
 
         // when
         orderService.cancelOrder(orderId);
+        orderService.cancelOrder(orderId2);
+        orderService.cancelOrder(orderId3);
+        orderService.cancelOrder(orderId4);
         // then
         Order getOrder = orderRepository.findOne(orderId);
+        Order getOrder2 = orderRepository.findOne(orderId2);
+        Order getOrder3 = orderRepository.findOne(orderId3);
+        Order getOrder4 = orderRepository.findOne(orderId4);
 
         assertEquals(OrderStatus.CANCEL, getOrder.getOrderStatus()); // 주문 취소 시 상태는 CANCEL
-        assertEquals(200, item.getStockQuantity()); // 주문이 취소된 상품은 그만큼 재고가 증가
+        assertEquals(200, book.getStockQuantity()); // 주문이 취소된 상품은 그만큼 재고가 증가
+
+        assertEquals(OrderStatus.CANCEL, getOrder2.getOrderStatus());
+        assertEquals(100, clean.getStockQuantity());
+
+        assertEquals(OrderStatus.CANCEL, getOrder3.getOrderStatus());
+        assertEquals(200, sport.getStockQuantity());
+
+        assertEquals(OrderStatus.CANCEL, getOrder4.getOrderStatus());
+        assertEquals(59, food.getStockQuantity());
     }
 
 
@@ -120,5 +157,23 @@ class OrderServiceTest {
         clean.setPrice(price);
         em.persist(clean);
         return clean;
+    }
+
+    private Sport createSport(String name, int price, int stockQuantity) {
+        Sport sport = new Sport();
+        sport.setName(name);
+        sport.setStockQuantity(stockQuantity);
+        sport.setPrice(price);
+        em.persist(sport);
+        return sport;
+    }
+
+    private Food createFood(String name, int price, int stockQuantity) {
+        Food food = new Food();
+        food.setName(name);
+        food.setStockQuantity(stockQuantity);
+        food.setPrice(price);
+        em.persist(food);
+        return food;
     }
 }
