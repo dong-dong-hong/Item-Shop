@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -52,5 +53,11 @@ public class MemberController {
    public String updateForm(@PathVariable("memberId") Long memberId, Model model) {
       model.addAttribute("memberForm",memberService.findOne(memberId));
       return "members/updateMemberForm";
+   }
+
+   @PostMapping("members/{memberId}/update")
+   public String update(@ModelAttribute("memberForm") MemberForm memberForm, @PathVariable("memberId") Long memberId) {
+      memberService.update(memberId, memberForm.getIdname(), memberForm.getPw(), memberForm.getName(), memberForm.getAddress(), memberForm.getAddressDetail());
+      return "redirect:/members";
    }
 }

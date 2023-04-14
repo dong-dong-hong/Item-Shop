@@ -1,6 +1,9 @@
 package com.item.itemshop.repository;
 
 import com.item.itemshop.domain.member.Member;
+import com.item.itemshop.domain.member.QMember;
+import com.querydsl.core.QueryFactory;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +18,7 @@ public class MemberRepository {
     private final EntityManager em;
 
     public void save(Member member) {
-        em.persist(member);
+      em.persist(member);
     }
 
     public Member findOne(Long id) {
@@ -23,13 +26,21 @@ public class MemberRepository {
     }
 
     public List<Member> findAll() {
-        return em.createQuery("select m from Member m", Member.class)
-                .getResultList();
+        return new JPAQueryFactory(em)
+                .selectFrom(QMember.member)
+                .fetch();
     }
 
     public List<Member> findByName(String name) {
-        return em.createQuery("select m from Member m where m.name = : name", Member.class)
-                .setParameter("name",name)
-                .getResultList();
+        return new JPAQueryFactory(em)
+                .selectFrom(QMember.member)
+                .where(QMember.member.name.eq(name))
+                .fetch();
+    }
+    public List<Member> findByIdname(String idname) {
+        return new JPAQueryFactory(em)
+                .selectFrom(QMember.member)
+                .where(QMember.member.idname.eq(idname))
+                .fetch();
     }
 }

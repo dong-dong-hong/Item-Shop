@@ -14,13 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemRepository {
 
-    @PersistenceContext
-    private EntityManager em;
+    private final EntityManager em;
 
-    public ItemRepository(EntityManager em){
-        this.em = em;
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-    }
 
     public void save(Item item) {
         if(item.getId() == null) {

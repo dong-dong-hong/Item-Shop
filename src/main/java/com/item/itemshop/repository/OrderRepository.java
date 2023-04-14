@@ -20,14 +20,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderRepository {
 
-    @PersistenceContext
-    private EntityManager em;
-
-    private QueryFactory queryFactory;
-
+    private final EntityManager em;
 
     public void save(Order order) {
-        em.persist(order);
+       em.persist(order);
     }
 
     public Order findOne(Long id) {

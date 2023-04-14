@@ -39,4 +39,23 @@ public class MemberService {
         return memberRepository.findOne(memberId);
     }
 
+    public void update(Long id, String idname, String pw, String name,String address, String addressDetail) {
+        Member member = memberRepository.findOne(id);
+        member.setIdname(idname);
+        member.setPw(pw);
+        member.setName(name);
+        member.setAddress(address);
+        member.setAddressDetail(addressDetail);
+    }
+    public Member login(String idname, String pw) {
+        List<Member> findMember = memberRepository.findByIdname(idname);
+        if (findMember.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 아이디입니다.");
+        }
+        Member member = findMember.get(0);
+        if (!member.getPw().equals(pw)) {
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+        return member;
+    }
 }
