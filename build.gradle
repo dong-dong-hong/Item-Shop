@@ -29,6 +29,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.0'
+    implementation 'org.hibernate.validator:hibernate-validator:7.0.1.Final'
+
     //Querydsl 추가
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
