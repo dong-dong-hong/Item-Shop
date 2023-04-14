@@ -17,6 +17,8 @@ public class Member {
     @Column(name = "member_id")
     private Long id; // pk
     private String name;
+    private String idname;
+    private String pw;
     private String address;
     private String addressDetail;
 
