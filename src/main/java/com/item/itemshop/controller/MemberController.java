@@ -1,5 +1,6 @@
 package com.item.itemshop.controller;
 
+import com.item.itemshop.controller.form.MemberForm;
 import com.item.itemshop.domain.member.Member;
 import com.item.itemshop.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

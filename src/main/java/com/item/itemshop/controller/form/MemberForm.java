@@ -1,4 +1,4 @@
-package com.item.itemshop.controller;
+package com.item.itemshop.controller.form;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
