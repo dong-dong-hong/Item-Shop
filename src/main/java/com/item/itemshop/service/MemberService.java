@@ -23,6 +23,11 @@ public class MemberService {
         return member.getId();
     }
 
+    @Transactional(readOnly = false)
+    public void saveMember(Member member) {
+        memberRepository.save(member);
+    }
+
     private void validateDuplicateMember(Member member) {
         List<Member> findMember = memberRepository.findByName(member.getName());
         if(!findMember.isEmpty()) {
@@ -39,14 +44,15 @@ public class MemberService {
         return memberRepository.findOne(memberId);
     }
 
-    public void update(Long id, String idname, String pw, String name,String address, String addressDetail) {
-        Member member = memberRepository.findOne(id);
-        member.setIdname(idname);
-        member.setPw(pw);
-        member.setName(name);
-        member.setAddress(address);
-        member.setAddressDetail(addressDetail);
-    }
+//    public Member update(String idname, String pw, String name,String address, String addressDetail) {
+//        Member member = new Member();
+//        member.setIdname(idname);
+//        member.setPw(pw);
+//        member.setName(name);
+//        member.setAddress(address);
+//        member.setAddressDetail(addressDetail);
+//        return member;
+//    }
     public Member login(String idname, String pw) {
         List<Member> findMember = memberRepository.findByIdname(idname);
         if (findMember.isEmpty()) {

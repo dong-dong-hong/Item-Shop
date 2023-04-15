@@ -2,15 +2,14 @@ package com.item.itemshop.controller;
 
 import com.item.itemshop.domain.member.Member;
 import com.item.itemshop.service.MemberService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,21 +42,43 @@ public class MemberController {
    }
 
    @GetMapping("/members")
-   public String list(Model model) {
+   public String list(Model model, HttpServletResponse response) {
       List<Member> members = memberService.findMembers();
       model.addAttribute("members",members);
+      response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
       return "members/memberList";
    }
 
+
+
+
    @GetMapping("members/{memberId}/update")
    public String updateForm(@PathVariable("memberId") Long memberId, Model model) {
-      model.addAttribute("memberForm",memberService.findOne(memberId));
+      Member member = memberService.findOne(memberId);
+
+      MemberForm memberForm = new MemberForm();
+      memberForm.setId(member.getId());
+      memberForm.setName(member.getName());
+      memberForm.setIdname(member.getIdname());
+      memberForm.setPw(member.getPw());
+      memberForm.setAddress(member.getAddress());
+      memberForm.setAddressDetail(member.getAddressDetail());
+
+      model.addAttribute("form", memberForm);
       return "members/updateMemberForm";
    }
 
    @PostMapping("members/{memberId}/update")
-   public String update(@ModelAttribute("memberForm") MemberForm memberForm, @PathVariable("memberId") Long memberId) {
-      memberService.update(memberId, memberForm.getIdname(), memberForm.getPw(), memberForm.getName(), memberForm.getAddress(), memberForm.getAddressDetail());
+   public String update(@Valid @ModelAttribute("form") MemberForm memberForm, @PathVariable Long memberId) {
+//      memberService.update(member.getIdname(), member.gememberFormtPw(), member.getName(), member.getAddress(), member.getAddressDetail());
+      Member member = new Member();
+      member.setId(memberId);
+      member.setName(memberForm.getName());
+      member.setIdname(memberForm.getIdname());
+      member.setPw(memberForm.getPw());
+      member.setAddress(memberForm.getAddress());
+      member.setAddressDetail(memberForm.getAddressDetail());
+      memberService.saveMember(member);
       return "redirect:/members";
    }
 }

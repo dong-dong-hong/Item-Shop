@@ -12,8 +12,7 @@ import java.util.List;
 @Table(name = "members")
 @Setter @Getter
 public class Member {
-
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id; // pk
     private String name;
