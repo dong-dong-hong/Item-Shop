@@ -44,6 +44,12 @@ public class MemberService {
         return memberRepository.findOne(memberId);
     }
 
+    // 회원 삭제
+    @Transactional
+    public void deleteMember(Long memberId) {
+        memberRepository.deleteById(memberId);
+    }
+
 //    public Member update(String idname, String pw, String name,String address, String addressDetail) {
 //        Member member = new Member();
 //        member.setIdname(idname);

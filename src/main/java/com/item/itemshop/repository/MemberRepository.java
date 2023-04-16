@@ -2,13 +2,8 @@ package com.item.itemshop.repository;
 
 import com.item.itemshop.domain.member.Member;
 import com.item.itemshop.domain.member.QMember;
-import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transaction;
-import jakarta.websocket.Session;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -24,12 +19,11 @@ public class MemberRepository {
         this.em = em;
     }
 
-    public Member save(Member member) {
+    public void save(Member member) {
         if (member.getId() == null) {
             em.persist(member);
-            return member;
         } else {
-            return em.merge(member);
+            em.merge(member);
         }
     }
     public Member findOne(Long id) {
@@ -53,5 +47,12 @@ public class MemberRepository {
                 .selectFrom(QMember.member)
                 .where(QMember.member.idname.eq(idname))
                 .fetch();
+    }
+
+    public void deleteById(Long id) {
+        new JPAQueryFactory(em)
+                .delete(QMember.member)
+                .where(QMember.member.id.eq(id))
+                .execute();
     }
 }
