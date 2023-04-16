@@ -7,12 +7,26 @@
 <body>
 <div class="container">
   <div th:replace="fragments/bodyHeader :: bodyHeader" />
+  <div class="row justify-content-between align-items-center">
+    <div class="col-4">
+      <h1>Home</h1>
+    </div>
+    <div class="col-4">
+      <!-- 로그인한 경우 -->
+      <p th:if="${#session.getAttribute('loginForm') != null}">로그인한 사용자: <span th:text="${#session.getAttribute('loginForm').idname}"></span></p>
+      <!-- 로그인하지 않은 경우 -->
+      <a class="btn btn-primary" th:if="${loginForm == null}" href="/members/login">로그인</a>
+      <!-- 로그인한 경우 -->
+      <a class="btn btn-secondary" th:if="${loginForm != null}" href="/logout">로그아웃</a>
+    </div>
   <div class="jumbotron">
     <h1>DongDong ITEM SHOP</h1>
     <p class="lead btn-info" >회원 기능</p>
     <p>
       <a class="btn btn-lg btn-light" href="/members/join">회원가입</a>
       <a class="btn btn-lg btn-light" href="/members">회원목록</a>
+      <a class="btn btn-lg btn-light" href="/members/login">로그인</a>
+      <a class="btn btn-lg btn-light" href="/logout">로그아웃</a>
     </p>
     <p class="lead btn-info">상품 기능</p>
     <p>
@@ -27,5 +41,6 @@
   </div>
   <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
+</div>
 </body>
 </html>
