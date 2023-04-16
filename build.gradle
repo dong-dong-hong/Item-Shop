@@ -22,10 +22,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    // Thymeleaf 3.x.x 버전으로 업그레이드
-    implementation 'org.thymeleaf:thymeleaf:3.0.12.RELEASE'
-    // Thymeleaf Spring Integration 3.x.x 버전으로 업그레이드
-    implementation 'org.thymeleaf:thymeleaf-spring5:3.0.12.RELEASE'
+
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
@@ -36,8 +33,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 
-    implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
-    implementation 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.0.0'
+
     implementation 'jakarta.validation:jakarta.validation-api:3.0.0'
     implementation 'org.hibernate.validator:hibernate-validator:7.0.1.Final'
 
