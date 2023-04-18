@@ -19,4 +19,6 @@ public class MemberForm {
     private String pw;
     private String address;
     private String addressDetail;
+
+    private String email;
 }

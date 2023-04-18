@@ -20,6 +20,7 @@ public class Member {
     private String pw;
     private String address;
     private String addressDetail;
+    private String email;
 
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
